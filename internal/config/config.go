@@ -70,7 +70,7 @@ func (c *ComplementCrypto) Bindings() []api.LanguageBindings {
 func NewComplementCryptoConfigFromEnvVars() *ComplementCrypto {
 	matrix := os.Getenv("COMPLEMENT_CRYPTO_TEST_CLIENT_MATRIX")
 	if matrix == "" {
-		matrix = "jj,jr,rj,rr"
+		matrix = "gg"
 	}
 	segs := strings.Split(matrix, ",")
 	clientLangs := make(map[api.ClientTypeLang]bool)
@@ -94,6 +94,12 @@ func NewComplementCryptoConfigFromEnvVars() *ComplementCrypto {
 					HS:   "hs1",
 				}
 				clientLangs[api.ClientTypeJS] = true
+			case 'g':
+				testCase[i] = api.ClientType{
+					Lang: api.ClientTypeMautrixGo,
+					HS:   "hs1",
+				}
+				clientLangs[api.ClientTypeMautrixGo] = true
 			case 'J':
 				testCase[i] = api.ClientType{
 					Lang: api.ClientTypeJS,
@@ -106,6 +112,12 @@ func NewComplementCryptoConfigFromEnvVars() *ComplementCrypto {
 					HS:   "hs2",
 				}
 				clientLangs[api.ClientTypeRust] = true
+			case 'G':
+				testCase[i] = api.ClientType{
+					Lang: api.ClientTypeMautrixGo,
+					HS:   "hs2",
+				}
+				clientLangs[api.ClientTypeMautrixGo] = true
 			default:
 				panic("COMPLEMENT_CRYPTO_TEST_CLIENT_MATRIX bad value: " + val)
 			}

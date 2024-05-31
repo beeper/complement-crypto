@@ -5,8 +5,9 @@ import "github.com/matrix-org/complement/ct"
 type ClientTypeLang string
 
 var (
-	ClientTypeRust ClientTypeLang = "rust"
-	ClientTypeJS   ClientTypeLang = "js"
+	ClientTypeRust      ClientTypeLang = "rust"
+	ClientTypeJS        ClientTypeLang = "js"
+	ClientTypeMautrixGo ClientTypeLang = "mautrixgo"
 )
 
 // LanguageBindings is the interface any new language implementation needs to satisfy to
