@@ -3,10 +3,12 @@ package mautrixgo
 import (
 	"context"
 	"database/sql"
+	"encoding/base64"
 	"os"
 
 	"go.mau.fi/util/dbutil"
 	"maunium.net/go/mautrix"
+	"maunium.net/go/mautrix/crypto/backup"
 	"maunium.net/go/mautrix/crypto/cryptohelper"
 	"maunium.net/go/mautrix/id"
 
@@ -119,7 +121,22 @@ func (c *MautrixClient) MustGetEvent(t ct.TestLike, roomID, eventID string) api.
 }
 
 func (c *MautrixClient) MustBackupKeys(t ct.TestLike) (recoveryKey string) {
-	panic("implement me")
+	megolmBackupKey, err := backup.NewMegolmBackupKey()
+	if err != nil {
+		t.Fatalf("Failed to create backup key: %s", err)
+	}
+	versionInfo, err := c.client.CreateKeyBackupVersion(context.TODO(), &mautrix.ReqRoomKeysVersionCreate[backup.MegolmAuthData]{
+		Algorithm: id.KeyBackupAlgorithmMegolmBackupV1,
+		AuthData: backup.MegolmAuthData{
+			PublicKey: id.Ed25519(base64.RawStdEncoding.EncodeToString(megolmBackupKey.PublicKey().Bytes())),
+		},
+	})
+	if err != nil {
+		t.Fatalf("Failed to create key backup version: %s", err)
+	} else if err = c.cryptoHelper.Machine().SetKeyBackupVersion(context.TODO(), versionInfo.Version); err != nil {
+		t.Fatalf("Failed to set key backup version: %s", err)
+	}
+	return
 }
 
 func (c *MautrixClient) MustLoadBackup(t ct.TestLike, recoveryKey string) {
