@@ -70,7 +70,7 @@ func (c *ComplementCrypto) Bindings() []api.LanguageBindings {
 func NewComplementCryptoConfigFromEnvVars() *ComplementCrypto {
 	matrix := os.Getenv("COMPLEMENT_CRYPTO_TEST_CLIENT_MATRIX")
 	if matrix == "" {
-		matrix = "gg"
+		matrix = "jj,jr,rj,rr"
 	}
 	segs := strings.Split(matrix, ",")
 	clientLangs := make(map[api.ClientTypeLang]bool)

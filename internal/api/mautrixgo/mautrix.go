@@ -64,6 +64,7 @@ func (c *MautrixClient) DeletePersistentStorage(t ct.TestLike) {
 }
 
 func (c *MautrixClient) Login(t ct.TestLike, opts api.ClientCreationOpts) error {
+	t.Logf("Logging in as %s", opts.UserID)
 	c.cryptoHelper.LoginAs = &mautrix.ReqLogin{
 		Type:       mautrix.AuthTypePassword,
 		Identifier: mautrix.UserIdentifier{Type: mautrix.IdentifierTypeUser, User: opts.UserID},
